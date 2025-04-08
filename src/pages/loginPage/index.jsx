@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {TextField, Typography, Button, Box,useTheme, Stack} from '@mui/material'
+import {TextField, Typography, Button, Box} from '@mui/material'
 import {Formik} from "formik"
 import * as yup from 'yup'
 import Navbar from '../../components/NavBar'
@@ -9,9 +9,15 @@ import {setLogin} from '../../state'
 
 
 const signupSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("required"),
-  username:  yup.string().required("required"),
-  password: yup.string().required("required"),
+  email: yup.string()
+    .matches(/^[^@]+@[^@]+\.(com)$/, 'Email must contain "@" and end with ".com"')
+    .required("required"),
+  username:  yup.string()
+    .required("required"),
+  password: yup.string()
+    .min(10, 'Password must be at least 10 characters')
+    .matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
+    .required("required"),
 })
 
 const loginSchema = yup.object().shape({
@@ -36,7 +42,6 @@ const initialValuesLog ={
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -80,11 +85,11 @@ const Login = () => {
             token: loggedIn.token
           })
         )
-        navigate("/home")
+        navigate("/")
       }
     }
     else {
-      alert("invalid Credentials!");
+      alert("invalid Username and Password!");
     }
   }
 
@@ -113,10 +118,11 @@ const Login = () => {
     console.log("registering in user: " + savedUser.email + values.username);
     onSubmitProps.resetForm()
     
+    
     if (savedUser){
       if (values.username.toLowerCase() !== "" && values.password !== "" && values.email !== "") {
-      alert("Here's what we got: \n" + "Email: " + values.email + "\nUsername: " + values.username + "\n Password: " + values.password);
-      setIsLogin(!isLogin)
+        alert(values.username + " registered successfully!");
+        setIsLogin(!isLogin)
       } 
 
       else {
@@ -131,7 +137,7 @@ const Login = () => {
     <Formik
       onSubmit={handleFormSubmit}
       initialValues={isLogin ? initialValuesLog : initialValuesReg}
-      formSchema={isLogin ? loginSchema : signupSchema}
+      validationSchema={isLogin ? loginSchema : signupSchema}
     >
       {({
         values, 
@@ -177,7 +183,7 @@ const Login = () => {
                 name='email'
                 variant='filled'
                 error={Boolean(touched.email) && Boolean(errors.email)}
-                helperText={touched.username && errors.username}
+                helperText={touched.email && errors.email}
                 sx={{
                     input: {
                       backgroundColor: '#E8e4c9', // input background
@@ -187,7 +193,6 @@ const Login = () => {
                     },
                   }}
                 InputLabelProps={{ style: {color: 'black'}}}
-                autoComplete='false'
                 />
             )}
 

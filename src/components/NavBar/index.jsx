@@ -39,9 +39,6 @@ const Navbar = () => {
         navigate('/announcements');
         break;
       case 2:
-        setAnchorE1(!anchorE1)
-        break;
-      case 3:
         navigate('/login');
         break;
       default:
@@ -83,47 +80,21 @@ const Navbar = () => {
                       <img
                       src={hovering ? Logo2 : Logo}
                       alt="Logo"
-                      style={{ height: '80px', width: '80px' }} />
+                      style={{ height: '30px', width: '100px' }} />
                   </Typography>
                   <Tabs
                       sx ={{marginLeft:"auto"}} 
                       textColor='inherit'
                       value={value}
                       onChange={handleChange}
-                      TabIndicatorProps={{style: {background:'#F4A4AC'}}}
+                      TabIndicatorProps={{style: {background:'#ff4654'}}}
                       >
                           <Tab label ="About" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>
                           <Tab label ="Announcements" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>
                           <FormControl>
                             <Select
-                              sx={{
-                                  backgroundColor: '#0b4c84',
-                                  width: "140px",
-                                  borderRadius: "0.25rem",
-                                  height: "50px",
-                                  p: "0.25rem 1rem",
-                                  "& .MuiSvgIcon-root:": {
-                                      pr: "0.25rem",
-                                      width: "3rem"
-                                  },
-                                  color: "white", "&:hover": {color: "#F4A4AC"}
-                              }}    
-                              maxMenuHeight={1}
-                              defaultValue="none"
-                              displayEmpty
-                              input={<InputBase/>}
-                            >
-                              <MenuItem disabled value="none"><Typography sx={{ color: "#9DB7CD", "&:hover": {color: "#F4A4AC"}}}>SERVICES</Typography></MenuItem>
-                              <MenuItem onClick={() => {navigate(`/water`)}}>
-                                  <Typography>Water</Typography>
-                              </MenuItem>
-                              <MenuItem onClick={() => {navigate("/laundry")}}><Typography>Laundry</Typography></MenuItem>
-                            </Select>
-                          </FormControl>
-                          <FormControl>
-                            <Select
                                   sx={{
-                                    backgroundColor: '#0b4c84',
+                                    backgroundColor: '#ff4654',
                                     width: "100px",
                                     borderRadius: "0.25rem",
                                     height: "50px",

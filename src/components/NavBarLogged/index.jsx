@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {AppBar, Toolbar, Typography, Tabs, Tab, Avatar }from '@mui/material';
 import { useNavigate, useLocation } from 'react-router';
-import Logo from './whiteLogoKeyan.PNG'
+import Logo from './valow.png'
 
 const NavLoggedIn = () => {
     const [value, setValue] = useState();
