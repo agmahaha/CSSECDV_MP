@@ -1,4 +1,4 @@
-import Order from ".../models/checkout.js"
+import Order from "../models/checkout.js"
 
 export const userOrder = async (req, res) => {
     console.log("went in");

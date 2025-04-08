@@ -3,8 +3,8 @@ import {AppBar, Toolbar, Typography, Tabs, Tab, MenuItem, Menu, Select, InputBas
 import { useNavigate, useLocation } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../../state";
-import Logo from './keyanwhite.PNG'
-import Logo2 from './pinkLogoKeyan.PNG'
+import Logo from './valorw.png'
+import Logo2 from './valorb.png'
 
 const Navbar = () => {
     const [value, setValue] = useState();
@@ -58,11 +58,11 @@ const Navbar = () => {
     return (
       <React.Fragment>
           <AppBar
-              sx ={{background:'#0b4c84', 
+              sx ={{background:'#ff4654', 
               margin:"10px auto",
-              borderRadius:"10px",
+              borderRadius:"1px",
               position:'sticky',
-              width: "85%",
+              width: "90%",
               left: 0,
               right: 0,
               }}>
@@ -83,7 +83,7 @@ const Navbar = () => {
                       <img
                       src={hovering ? Logo2 : Logo}
                       alt="Logo"
-                      style={{ height: '60px', width: '60px' }} />
+                      style={{ height: '80px', width: '80px' }} />
                   </Typography>
                   <Tabs
                       sx ={{marginLeft:"auto"}} 
@@ -157,11 +157,11 @@ const Navbar = () => {
     return (
       <React.Fragment>
           <AppBar
-              sx ={{background:'#0b4c84', 
+              sx ={{background:'#ff4654', 
               margin:"10px auto",
-              borderRadius:"10px",
+              borderRadius:"1px",
               position:'sticky',
-              width: "85%",
+              width: "90%",
               left: 0,
               right: 0,
               }}>
@@ -182,7 +182,7 @@ const Navbar = () => {
                       <img
                       src={hovering ? Logo2 : Logo}
                       alt="Logo"
-                      style={{ height: '60px', width: '60px' }}
+                      style={{ height: '30px', width: '100px' }}
                       />
                   </Typography>
                   <Tabs
@@ -194,32 +194,6 @@ const Navbar = () => {
                       >
                           <Tab label ="About" sx={{ color: "white", "&:hover": {color: "#F4A4AC"}}}/>
                           <Tab label ="Announcements" sx={{ color: "white", "&:hover": {color: "#F4A4AC"}}}/>
-                          <FormControl>
-                            <Select
-                              sx={{
-                                  backgroundColor: '#0b4c84',
-                                  width: "140px",
-                                  borderRadius: "0.25rem",
-                                  height: "50px",
-                                  p: "0.25rem 1rem",
-                                  "& .MuiSvgIcon-root:": {
-                                      pr: "0.25rem",
-                                      width: "3rem"
-                                  },
-                                  color: "white", "&:hover": {color: "#F4A4AC"}
-                              }}    
-                              maxMenuHeight={1}
-                              defaultValue="none"
-                              displayEmpty
-                              input={<InputBase/>}
-                            >
-                              <MenuItem key='0' disabled value="none"><Typography sx={{ color: "#9DB7CD", "&:hover": {color: "#F4A4AC"}}}>SERVICES</Typography></MenuItem>
-                              <MenuItem onClick={() => {navigate(`/water`)}}>
-                                  <Typography>Water</Typography>
-                              </MenuItem>
-                              <MenuItem onClick={() => {navigate("/laundry")}}><Typography>Laundry</Typography></MenuItem>
-                            </Select>
-                          </FormControl>
                           <Tab label ="Login/Signup" sx={{ color: "white", "&:hover": {color: "#F4A4AC"}}}/>
   
                           </Tabs>
