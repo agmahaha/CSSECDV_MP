@@ -27,9 +27,12 @@ const PageNotFound = () => {
   return (
     <body className='page-not-found-container'>
 
-    <Box bgcolor="white" sx={{ width: '85%', margin: '0 auto', borderRadius: '10px', height:'500px' }}>
+    <Box bgcolor="white" sx={{ width: '100%', margin: '0 auto', borderRadius: '10px', height:'1000px', display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+ }}>
             <div className='page-not-found-pad'> 
-              <h1>404</h1>
+              <h1>Error 404</h1>
               <h2>Page Not Found</h2>
               <Typography
                sx={{

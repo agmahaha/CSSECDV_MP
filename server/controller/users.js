@@ -30,17 +30,13 @@ export const updateUser = async(req, res) =>{
     try{
         const{
             id, 
-            address,
             phone_num,
-            name
         } = req.body
 
         const user = await User.updateOne({_id: id},
             {
                 $set: {
-                    address: address,
                     phone_num: phone_num,
-                    name: name
                 }
             })
         res.status(200).json(user)

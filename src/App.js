@@ -12,6 +12,7 @@ function App() {
         <Route path = "/" element={<Home/>}/>
         <Route path = "/login" element={<LogForm/>}/>
         <Route path = "/about" element={<About/>}/>
+        <Route path="*" element={<Navigate to="/pageNotFound" />} />
         <Route path = "/pageNotFound" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>

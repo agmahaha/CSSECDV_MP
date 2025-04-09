@@ -20,18 +20,10 @@ const UserSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        address:{
-            type: String,
-            required: false
-        },
         phone_num:{
             type: Number,
             required: false
         },
-        name:{
-            type: String,
-            required: false
-        }
         
     }, {timestamps: true}
 )

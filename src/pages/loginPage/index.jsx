@@ -30,14 +30,14 @@ const initialValuesReg = {
   password:"",  
   email:"",
   userType: "customer",
-  address:"",
   phone_num:"",
-  name:""
 }
 
 const initialValuesLog ={
   username:"",
   password:"",
+  userType: "customer",
+  message:""
 }
 
 const Login = () => {
@@ -76,7 +76,7 @@ const Login = () => {
             token: loggedIn.token
           })
         )
-        navigate("/employee/home");
+        navigate("/");
       } 
       else if (loggedIn.user.userType === "customer") {
         dispatch(
@@ -106,9 +106,7 @@ const Login = () => {
           password: values.password,
           email: values.email,
           userType: "customer",
-          address: "",
           phone_num: "",
-          name:""
         })
       }
     )
@@ -121,12 +119,18 @@ const Login = () => {
     
     if (savedUser){
       if (values.username.toLowerCase() !== "" && values.password !== "" && values.email !== "") {
+        console.log("Log payload:", {
+            username: values.username,
+            message: "failed to login.",
+            userType: values.userType,
+          })
         alert(values.username + " registered successfully!");
         setIsLogin(!isLogin)
       } 
 
       else {
-        alert("invalid Credentials!");
+        alert("Invalid Credentials!");
+        
       }
     }
     
