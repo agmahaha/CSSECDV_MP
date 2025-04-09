@@ -37,9 +37,12 @@ const HomePage = () => {
 
     const user = useSelector((state) => state.user);
 
+
     useEffect(() => {
         if (user !== null) {
-            if(user.userType !== "customer"){
+            if(user.userType === "admin"){
+                navigate('/logs');
+            } else if(user.userType !== "customer"){
                 navigate('/pageNotFound');
             }
         }
@@ -47,7 +50,7 @@ const HomePage = () => {
 
     if (user) {
         var userType = `${user.userType}`;
-      }
+    }
 
     if (userType === 'customer' || user === null){
         return (

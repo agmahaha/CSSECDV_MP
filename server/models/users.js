@@ -24,6 +24,22 @@ const UserSchema = new mongoose.Schema(
             type: Number,
             required: false
         },
+        failedAttempts:{
+            type: Number,
+            default: 0
+        },
+        lockUntil: {
+            type: Date,
+            default: null
+        },
+        passwordHistory:{
+            type: [String],
+            default: [],
+        },
+        passwordChangedAt: {
+            type: Date,
+            default: Date.now,
+        },
         
     }, {timestamps: true}
 )

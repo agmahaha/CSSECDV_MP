@@ -8,6 +8,11 @@ import { useDispatch } from "react-redux";
 import {setLogin} from '../../state'
 
 
+const Login = () => {
+    const [isLogin, setIsLogin] = useState(true);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
 const signupSchema = yup.object().shape({
   email: yup.string()
     .matches(/^[^@]+@[^@]+\.(com)$/, 'Email must contain "@" and end with ".com"')
@@ -40,10 +45,6 @@ const initialValuesLog ={
   message:""
 }
 
-const Login = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleFormSubmit = async(values, onSubmitProps) => {
     if (isLogin === true) await loginUser(values, onSubmitProps);
@@ -68,7 +69,17 @@ const Login = () => {
     onSubmitProps.resetForm()
 
     if (loggedInResponse.status === 200){
-      if (loggedIn.user.userType === "admin" || loggedIn.user.userType === "employee") {
+      if (loggedIn.user.userType === "admin") {
+        alert("Here's what we got: \n" + "Username: " + loggedIn.user.username + "\n Password: " + loggedIn.user.password);
+        dispatch(
+          setLogin({
+            user: loggedIn.user,
+            token: loggedIn.token
+          })
+        )
+        navigate("/logs");
+      } 
+      else if (loggedIn.user.userType === "manager") {
         alert("Here's what we got: \n" + "Username: " + loggedIn.user.username + "\n Password: " + loggedIn.user.password);
         dispatch(
           setLogin({
@@ -87,9 +98,10 @@ const Login = () => {
         )
         navigate("/")
       }
+      alert(loggedIn.msg);
     }
     else {
-      alert("invalid Username and Password!");
+      alert(loggedIn.msg);
     }
   }
 

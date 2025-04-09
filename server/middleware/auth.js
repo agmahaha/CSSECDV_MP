@@ -28,15 +28,23 @@ export const verifyToken = async (req, res, next) => {
 }
 
 export const isAdmin = async (req, res, next) => {
-    const { userType } = req.query; // Extract userType from query parameters
-    console.log(userType + " user");
-    if (userType === 'admin') {
-        await logUser(req.username, `Admin access granted to user ${req.username}`, req.userType)
-        next();
-    } else {
-        const errorMessage = "Unauthorized access attempt: User is not an admin";
-        console.error(errorMessage);
-        await logError(errorMessage, "Access Control", req.user || null);
-        res.status(401).json({ message: 'Unauthorized' });
+    try {
+        console.log(req.params);
+        const { username, userType } = req.query; // Extract user info from query parameters
+        console.log(`${userType} user ${username}`);
+
+        if (userType === 'admin') {
+            await logUser(username, `Admin access granted to user ${username}`, userType);
+            return next(); // Proceed to the next middleware/handler
+        } else {
+            const errorMessage = "Unauthorized access attempt: User is not an admin";
+            console.error(errorMessage);
+            await logError(errorMessage, "Access Control", username || null);
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+    } catch (err) {
+        console.error("Error in isAdmin middleware:", err);
+        await logError("Unexpected error during admin check", "Access Control", req.query.username || null);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };

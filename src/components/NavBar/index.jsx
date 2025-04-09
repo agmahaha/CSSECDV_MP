@@ -21,22 +21,31 @@ const Navbar = () => {
       setValue(0);
     } else if (location.pathname === '/announcements') {
       setValue(1);
-    } else if (location.pathname === ('/water' || '/laundry')) {
-      setValue(2);
     } else if (location.pathname === '/login') {
       setValue(3);
     } 
   }, [location.pathname]);
-  
+
+  if (user) {
+    var username = `${user.username}`;
+    var typeOfUser = user.userType
+  }
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
 
     switch (newValue) {
       case 0:
-        navigate('/about');
+        if(typeOfUser === 'admin')
+          navigate('/logs');
+        else
+          navigate('/about');
         break;
       case 1:
-        navigate('/announcements');
+        if(typeOfUser === 'admin')
+          navigate('/manageUser');
+        else
+          navigate('/announcements');
         break;
       case 2:
         navigate('/login');
@@ -45,11 +54,6 @@ const Navbar = () => {
         navigate('/');
     }
   };
-
-  if (user) {
-    var username = `${user.username}`;
-    var typeOfUser = user.userType
-  }
 
   if (username) {
     return (
@@ -88,9 +92,11 @@ const Navbar = () => {
                       value={value}
                       onChange={handleChange}
                       TabIndicatorProps={{style: {background:'#ff4654'}}}
-                      >
-                          <Tab label ="About" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>
-                          <Tab label ="Announcements" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>
+                      >   
+                          {typeOfUser === 'customer' && (<Tab label ="About" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>)}
+                          {typeOfUser === 'customer' && (<Tab label ="Announcements" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>)}
+                          {typeOfUser === 'admin' && (<Tab label ="Logs" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>)}
+                          {typeOfUser === 'admin' && (<Tab label ="Manage Users" sx={{ color: "white", "&:hover": {color: "#F4A4AC"} }}/>)}
                           <FormControl>
                             <Select
                                   sx={{

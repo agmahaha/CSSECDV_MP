@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import authRoute from "./route/auth.js"
 import userRoute from "./route/users.js"
 import checkoutRoute from "./route/checkout.js"
+import logRoute from "./route/logs.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,6 +30,7 @@ app.use("/assets", express.static(path.join(__dirname, 'public/assets'))); // se
 app.use("/auth", authRoute)
 app.use("/users", userRoute)
 app.use("/checkout", checkoutRoute)
+app.use("/logs", logRoute)
 
 
 /* MONGOOSE SETUP */
