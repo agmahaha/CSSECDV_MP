@@ -25,7 +25,7 @@ const ProfilePage = () => {
       }
     
       try {
-        const res = await fetch("http://localhost:3001/users/changePassword", {
+        const res = await fetch(`http://localhost:3001/users/changePassword`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -38,10 +38,24 @@ const ProfilePage = () => {
             newPassword
           }),
         });
+
+        const getUpdatedUser = await fetch(`http://localhost:3001/users/${user._id}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json",
+                     "Authorization": `Bearer ${token}` },
+        })
     
         const data = await res.json();
+
+        if (!getUpdatedUser.ok) {
+          console.error('Failed to fetch user data')
+        }else{
+          const updatedUser = await getUpdatedUser.json()
+          dispatch(updateUser({user : updatedUser}))
+        }
+
         if (!res.ok) {
-          setPasswordError(data.message || "Failed to change password");
+          setPasswordError(data.msg || "Failed to change password");
         } else {
           setPasswordSuccess("Password changed successfully");
           setPasswordError('');
@@ -238,6 +252,8 @@ const ProfilePage = () => {
                   onChange={(e) => setSecurityAnswerInput(e.target.value)}
                   variant="filled"
                   sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                  error={Boolean(passwordError?.toLowerCase().includes("security"))}
+                  helperText={passwordError?.toLowerCase().includes("security") ? passwordError : ""}
                 />
                 <TextField
                   fullWidth
@@ -247,6 +263,8 @@ const ProfilePage = () => {
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   variant="filled"
                   sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                  error={Boolean(passwordError?.toLowerCase().includes("current password"))}
+                  helperText={passwordError?.toLowerCase().includes("current password") ? passwordError : ""}
                 />
                 <TextField
                   fullWidth
@@ -256,6 +274,12 @@ const ProfilePage = () => {
                   onChange={(e) => setNewPassword(e.target.value)}
                   variant="filled"
                   sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                  error={Boolean(passwordError?.toLowerCase().includes("reuse") || passwordError?.toLowerCase().includes("24 hour"))}
+                  helperText={
+                    passwordError?.toLowerCase().includes("reuse") || passwordError?.toLowerCase().includes("24 hour")
+                      ? passwordError
+                      : ""
+                  }
                 />
                 <TextField
                   fullWidth
@@ -265,9 +289,9 @@ const ProfilePage = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   variant="filled"
                   sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                  error={Boolean(passwordError?.toLowerCase().includes("match"))}
+                  helperText={passwordError?.toLowerCase().includes("match") ? passwordError : ""}
                 />
-                {passwordError && <Typography color="error">{passwordError}</Typography>}
-                {passwordSuccess && <Typography color="success.main">{passwordSuccess}</Typography>}
                 <Button
                   variant="contained"
                   sx={{
