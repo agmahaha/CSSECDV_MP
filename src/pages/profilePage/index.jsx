@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {TextField, Typography, Button, Box, Grid} from '@mui/material'
+import {TextField, Typography, Button, Box, Grid, Snackbar, Alert} from '@mui/material'
 import Navbar from '../../components/NavBar'
 import {useSelector, useDispatch } from "react-redux";
 import {updateUser} from '../../state'
@@ -17,6 +17,8 @@ const ProfilePage = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [passwordSuccess, setPasswordSuccess] = useState('');
+    const [snackOpen, setSnackOpen] = useState(false);
+
 
     const handlePasswordChange = async () => {
       if (newPassword !== confirmPassword) {
@@ -60,6 +62,7 @@ const ProfilePage = () => {
           setPasswordSuccess("Password changed successfully");
           setPasswordError('');
           setShowPasswordForm(false);
+          setSnackOpen(true);
         }
       } catch (err) {
         setPasswordError("An unexpected error occurred");
@@ -224,7 +227,17 @@ const ProfilePage = () => {
                        height: '50%',
                    }}
                >
-           {!showPasswordForm && (
+              <Snackbar
+                open={snackOpen}
+                autoHideDuration={2000}
+                onClose={() => setSnackOpen(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              >
+                <Alert onClose={() => setSnackOpen(false)} severity="success" sx={{ width: '100%' }}>
+                  {passwordSuccess}
+                </Alert>
+              </Snackbar>
+            {!showPasswordForm && (
             <>
               <h3>EMAIL:</h3>
               <Typography>{CEmail}</Typography>
