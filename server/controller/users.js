@@ -91,7 +91,7 @@ export const changePassword = async (req, res) => {
       if (now - user.passwordChangedAt.getTime() < oneDay) {
         const changeTimeLeft = oneDay - (now - user.passwordChangedAt);
         return res.status(400).json({
-          msg: `Password change not allowed. Try again in ${Math.ceil(changeTimeLeft / 1000 / 60)} minutes.`,
+          msg: `Password is not old enough. Try again in ${Math.ceil(changeTimeLeft / 1000 / 60)} minutes.`,
         });
       }
   
@@ -102,7 +102,7 @@ export const changePassword = async (req, res) => {
   
       if (isReused) {
         return res.status(400).json({
-          msg: "You cannot reuse a previous password or change it more than once in 24 hours.",
+          msg: "You cannot reuse a previous password.",
         });
       }
   
