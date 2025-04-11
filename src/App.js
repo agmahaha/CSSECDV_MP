@@ -20,6 +20,7 @@ function App() {
         <Route path = "/manageUser" element={<ManageUsers/>}/>
         <Route path="*" element={<Navigate to="/pageNotFound" />} />
         <Route path = "/pageNotFound" element={<PageNotFound/>}/>
+        <Route path = "/unauthorizedAccess" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>
   );
