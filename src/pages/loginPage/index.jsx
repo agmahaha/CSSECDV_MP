@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {TextField, Typography, Button, Box} from '@mui/material'
+import {TextField, Typography, Button, Box, MenuItem} from '@mui/material'
 import {Formik} from "formik"
 import * as yup from 'yup'
 import Navbar from '../../components/NavBar'
@@ -12,24 +12,17 @@ const Login = () => {
     const [isLogin, setIsLogin] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [selectedQuestion, setSelectedQuestion] = useState('');
 
-const sampleQuestions = {
-    1: "What is the name of the first school you attended?",
-    2: "What is the name of your childhood best friend?",
-    3: "What was the make and model of your first car?",
-    4: "What is the name of the street you lived on when you were 10?",
-    5: "What was the name of your first pet?",
-    6: "What is the title of the first movie you saw in a theater?"
-}
 
-useEffect(() => {
-    if (!isLogin) {
-      const keys = Object.keys(sampleQuestions);
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      setSelectedQuestion(sampleQuestions[randomKey]);
-    }
-  }, [isLogin]);
+const sampleQuestions = [
+   "What is the name of the first school you attended?",
+   "What is the name of your childhood best friend?",
+   "What was the make and model of your first car?",
+   "What is the name of the street you lived on when you were 10?",
+   "What was the name of your first pet?",
+   "What is the title of the first movie you saw in a theater?"
+]
+
 
 const signupSchema = yup.object().shape({
   email: yup.string()
@@ -137,7 +130,7 @@ const initialValuesLog ={
           email: values.email,
           userType: "customer",
           phone_num: "",
-          securityQuestion: selectedQuestion,
+          securityQuestion: values.securityQuestion,
           securityAnswer: values.securityAnswer
         })
       }
@@ -275,19 +268,40 @@ const initialValuesLog ={
               InputLabelProps={{ style: {color: 'black'}}}
               />
             {!isLogin && (
+            
             <TextField
-                fullWidth
-                label="Security Question"
-                value={selectedQuestion}
-                name="securityQuestion"
-                variant="filled"
-                InputProps={{ readOnly: true }}
-                sx={{
-                input: { backgroundColor: '#E8e4c9' },
-                label: { color: 'white' },
-                }}
-                InputLabelProps={{ style: { color: 'black' } }}
-            />
+              select
+              fullWidth
+              label="Select Security Question"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.securityQuestion}
+              name="securityQuestion"
+              variant="filled"
+              error={Boolean(touched.securityQuestion) && Boolean(errors.securityQuestion)}
+              helperText={touched.securityQuestion && errors.securityQuestion}
+              sx={{
+                textAlign: 'left',
+                '& .MuiSelect-filled': {
+                  backgroundColor: '#E8e4c9',
+                  color: 'black',
+                },
+                '& .MuiInputLabel-root': {
+                  color: 'white',
+                },
+              }}
+              InputLabelProps={{ style: { color: 'black' } }}
+            >
+              {sampleQuestions.map((question, index) => (
+                <MenuItem
+                  key={index}
+                  value={question}
+                >
+                  {question}
+                </MenuItem>
+              ))}
+            </TextField>
+    
             )}
 
             {!isLogin && (
@@ -307,6 +321,7 @@ const initialValuesLog ={
                 }}
                 InputLabelProps={{ style: { color: 'black' } }}
             />
+            
             )}
 
             <Button
@@ -325,23 +340,23 @@ const initialValuesLog ={
               {isLogin ? 'LOGIN' : 'REGISTER'}
             </Button>
             <Typography
-              onClick={() => {
-                setIsLogin(!isLogin)
-                resetForm()
-              } }
-              sx={{
-                color: 'White',
-                textDecoration: 'underline',
-                "&:hover": {
-                  cursor: "pointer",
-                  color: "#ba3a46",
-                },
-              }}
-            >
-              {isLogin
-                ? "Don't have an Account? Register HERE!"
-                : "Already have an Account? Log in HERE!"}
-            </Typography>
+                    onClick={() => {
+                      setIsLogin(!isLogin)
+                      resetForm()
+                    } }
+                    sx={{
+                      color: 'White',
+                      textDecoration: 'underline',
+                      "&:hover": {
+                        cursor: "pointer",
+                        color: "#ba3a46",
+                      },
+                    }}
+                  >
+                    {isLogin
+                      ? "Don't have an Account? Register HERE!"
+                      : "Already have an Account? Log in HERE!"}
+              </Typography>  
           </Box>
         </form>
       )}

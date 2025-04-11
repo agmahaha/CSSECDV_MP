@@ -10,6 +10,47 @@ const ProfilePage = () => {
     const [phone_num, setPhoneNum] = useState ()
     const dispatch = useDispatch();
     const [isEdit, setIsEdit] = useState(false)
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [securityAnswerInput, setSecurityAnswerInput] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [passwordSuccess, setPasswordSuccess] = useState('');
+
+    const handlePasswordChange = async () => {
+      if (newPassword !== confirmPassword) {
+        setPasswordError("New passwords do not match");
+        return;
+      }
+    
+      try {
+        const res = await fetch("http://localhost:3001/users/changePassword", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            id: user._id,
+            securityAnswerInput,
+            currentPassword,
+            newPassword
+          }),
+        });
+    
+        const data = await res.json();
+        if (!res.ok) {
+          setPasswordError(data.message || "Failed to change password");
+        } else {
+          setPasswordSuccess("Password changed successfully");
+          setPasswordError('');
+          setShowPasswordForm(false);
+        }
+      } catch (err) {
+        setPasswordError("An unexpected error occurred");
+      }
+    };
 
     const updateDetails = async () => {
         const updatedProfile = await fetch(
@@ -169,11 +210,94 @@ const ProfilePage = () => {
                        height: '50%',
                    }}
                >
-           <h3>EMAIL:</h3>
-           <Typography>{CEmail}</Typography>
+           {!showPasswordForm && (
+            <>
+              <h3>EMAIL:</h3>
+              <Typography>{CEmail}</Typography>
 
-           <h3>Contact Number:</h3>
-           <Typography>{CPhone}</Typography>
+              <h3>Contact Number:</h3>
+              <Typography>{CPhone}</Typography>
+            </>
+          )}
+           {showPasswordForm && (
+            <>
+                <TextField
+                  fullWidth
+                  label="Security Question"
+                  type="text"
+                  value={user.securityQuestion}
+                  variant="filled"
+                  sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                  disabled
+                />
+                <TextField
+                  fullWidth
+                  label="Answer for Security Question"
+                  type="text"
+                  value={securityAnswerInput}
+                  onChange={(e) => setSecurityAnswerInput(e.target.value)}
+                  variant="filled"
+                  sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                />
+                <TextField
+                  fullWidth
+                  label="Current Password"
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  variant="filled"
+                  sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                />
+                <TextField
+                  fullWidth
+                  label="New Password"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  variant="filled"
+                  sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                />
+                <TextField
+                  fullWidth
+                  label="Confirm New Password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  variant="filled"
+                  sx={{ input: { backgroundColor: '#E8e4c9' } }}
+                />
+                {passwordError && <Typography color="error">{passwordError}</Typography>}
+                {passwordSuccess && <Typography color="success.main">{passwordSuccess}</Typography>}
+                <Button
+                  variant="contained"
+                  sx={{
+                    color: 'black',
+                    bgcolor: 'white',
+                    "&:hover": { color: 'white', bgcolor: '#ba3a46' },
+                    width: '30%',
+                    alignSelf: 'center'
+                  }}
+                  onClick={handlePasswordChange}
+                >
+                  Change Password
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    color: 'black',
+                    bgcolor: 'white',
+                    "&:hover": { color: 'white', bgcolor: '#ba3a46' },
+                    width: '30%',
+                    alignSelf: 'center'
+                  }}
+                  onClick={() => setShowPasswordForm(!showPasswordForm)}
+                >
+                  Cancel
+                </Button>
+              </>
+            )}
+          {!showPasswordForm && (
+            <>
            <Grid container spacing={2} sx={{ textAlign: 'center', padding: '2% 2% 5% 2%', display: 'flex' }}>
                 {/* First Column */}
                 <Grid item xs={12} sm={12} md={5.5} lg={5.5} ml={5} sx={{ flexFlow: 'column' }}>
@@ -200,27 +324,27 @@ const ProfilePage = () => {
     
                 {/* Second Column */}
                 <Grid item xs={12} sm={12} md={5.5} lg={5.5} sx={{ flexFlow: 'column' }}>
-                    <Button
-                        variant='contained'
-                        type='submit'
-                        name='submit'
-                        sx={{
-                        color: 'black',
-                        bgcolor: 'white',
-                        "&:hover": {
-                            color: 'white',
-                            bgcolor: '#ba3a46'
-                        },
-                        width:'50%'
-                        }}
-                        onClick={() => {
-                        setIsEdit(!isEdit)
-                        }}
-                        >
-                        Change Password
-                    </Button>          
+                  <Button
+                    variant='contained'
+                    type='submit'
+                    name='submit'
+                    sx={{
+                      color: 'black',
+                      bgcolor: 'white',
+                      "&:hover": {
+                        color: 'white',
+                        bgcolor: '#ba3a46'
+                      },
+                      width:'50%'
+                    }}
+                    onClick={() => setShowPasswordForm(!showPasswordForm)}
+                  >
+                    Change Password
+                  </Button>
                 </Grid>
-            </Grid> 
+            </Grid>
+            </>
+          )} 
        </Box>
       </>
      )
