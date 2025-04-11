@@ -91,15 +91,23 @@ export const changePassword = async (req, res) => {
       if (now - user.passwordChangedAt.getTime() < oneDay) {
         const changeTimeLeft = oneDay - (now - user.passwordChangedAt);
         return res.status(400).json({
-          msg: `Password is not old enough. Try again in ${Math.ceil(changeTimeLeft / 1000 / 60)} minutes.`,
+          msg: `Password is not old enough. Try again in 24 hours.`,
         });
       }
   
       // 🔁 Check if new password was used before (including current one)
-      const isReused = await Promise.any(
-        user.passwordHistory.map(oldHash => bcrypt.compare(newPassword, oldHash))
-      ).then(() => true).catch(() => false);
-  
+      let isReused = false;
+
+    for (let i = 0; i < user.passwordHistory.length; i++) {
+    const oldHash = user.passwordHistory[i];
+    const match = await bcrypt.compare(newPassword, oldHash);
+    console.log(`Comparing with history[${i}]:`, match);
+    if (match) {
+        isReused = true;
+        break;
+    }
+    }
+      
       if (isReused) {
         return res.status(400).json({
           msg: "You cannot reuse a previous password.",

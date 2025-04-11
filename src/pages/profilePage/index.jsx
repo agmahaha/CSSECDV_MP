@@ -287,12 +287,8 @@ const ProfilePage = () => {
                   onChange={(e) => setNewPassword(e.target.value)}
                   variant="filled"
                   sx={{ input: { backgroundColor: '#E8e4c9' } }}
-                  error={Boolean(passwordError?.toLowerCase().includes("reuse") || passwordError?.toLowerCase().includes("24 hour"))}
-                  helperText={
-                    passwordError?.toLowerCase().includes("reuse") || passwordError?.toLowerCase().includes("24 hour")
-                      ? passwordError
-                      : ""
-                  }
+                  error={Boolean(passwordError?.toLowerCase().includes("reuse"))}
+                  helperText={passwordError?.toLowerCase().includes("reuse")? passwordError: ""}
                 />
                 <TextField
                   fullWidth
@@ -305,6 +301,8 @@ const ProfilePage = () => {
                   error={Boolean(passwordError?.toLowerCase().includes("match"))}
                   helperText={passwordError?.toLowerCase().includes("match") ? passwordError : ""}
                 />
+                {passwordError && Boolean(passwordError?.toLowerCase().includes("24")) &&<Typography color="error.main">{passwordError}</Typography>}
+
                 <Button
                   variant="contained"
                   sx={{
