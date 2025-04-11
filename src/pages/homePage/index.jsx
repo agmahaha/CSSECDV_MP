@@ -10,6 +10,7 @@ import Footer from '../../components/Footer'
 
 const HomePage = () => {
     const navigate = useNavigate();
+    const [snackOpen, setSnackOpen] = useState(false);
 
     const [open, setOpen] = useState(true);
 
@@ -26,7 +27,7 @@ const HomePage = () => {
     };
 
     const navigateToAnnouncements = () => {
-        navigate('/announcements');
+        navigate('/about');
     }
 
     const theme = useTheme();
@@ -36,6 +37,18 @@ const HomePage = () => {
     };
 
     const user = useSelector((state) => state.user);
+
+    const handleProtectedClick = () => {
+        if (user === null) {
+            setSnackOpen(true);
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000); // wait 2 seconds before navigating
+        } else {
+            navigateToPageNotFound();
+        }
+    };
+    
 
 
     useEffect(() => {
@@ -83,6 +96,17 @@ const HomePage = () => {
                             </Typography>
                         </Grid>
                     </Grid>
+                    <Snackbar
+                        open={snackOpen}
+                        autoHideDuration={2000}
+                        onClose={() => setSnackOpen(false)}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                        >
+                        <Alert onClose={() => setSnackOpen(false)} severity="warning" sx={{ width: '100%' }}>
+                            Please login first to access page.
+                        </Alert>
+                    </Snackbar>
+                    
                     <Grid container spacing={2} sx={{ textAlign: 'center', padding: '2% 2% 5% 2%', display: 'flex' }}>
                         {/* First Column */}
                         <Grid item xs={12} sm={12} md={5.5} lg={5.5} ml={5} sx={{ flexFlow: 'column' }}>
@@ -101,14 +125,14 @@ const HomePage = () => {
                             >
                                 —Knife—
                             </Typography>
-                            <IconButton onClick={navigateToAnnouncements}>
+                            <IconButton onClick={handleProtectedClick}>
                                 <Box bgcolor='#ba3a46' p={1} borderRadius={1} display='flex' flexDirection='row' sx={{'&:hover': {
                                         transform: 'scale(1.1)',
                                     }}}>
                                     <img
                                     src={Valknife}
                                     alt="Logo"
-                                    style={{ height: '300px', width: '550px'}}
+                                    style={{ height: '30%', width: '100%'}}
                                     />
                                 </Box>
                                 
@@ -129,14 +153,14 @@ const HomePage = () => {
                             >
                                 —Knife—
                             </Typography>
-                            <IconButton onClick={navigateToAnnouncements}>
+                            <IconButton onClick={handleProtectedClick}>
                                 <Box bgcolor='#ba3a46' p={1} borderRadius={1} display='flex' flexDirection='row' sx={{'&:hover': {
                                         transform: 'scale(1.1)',
                                     }}}>
                                     <img
                                     src={Valknife}
                                     alt="Logo"
-                                    style={{ height: '300px', width: '550px'}}
+                                    style={{ height: '30%', width: '100%'}}
                                     />
                                 </Box>
                                 
@@ -145,14 +169,14 @@ const HomePage = () => {
     
                         {/* Second Column */}
                         <Grid item xs={12} sm={12} md={5.5} lg={5.5} ml={14}sx={{ flexFlow: 'column' }}>
-                            <IconButton onClick={navigateToAnnouncements}>
+                            <IconButton onClick={handleProtectedClick}>
                                 <Box bgcolor='#ba3a46' p={1} borderRadius={1} display='flex' flexDirection='row' sx={{'&:hover': {
-                                        transform: 'scale(1.1)',
+                                        transform: 'scale(1.1)'
                                     }}}>
                                     <img
                                     src={Bundle}
                                     alt="Logo"
-                                    style={{ height: '450px', width: '800px'}}
+                                    style={{ height: '450px', width: '800px', margin: '0 auto'}}
                                     />
                                 </Box>
                                 
