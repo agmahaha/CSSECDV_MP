@@ -38,7 +38,8 @@ const signupSchema = yup.object().shape({
     .matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
     .required("required"),
   securityAnswer: yup.string()
-    .max(50, 'Password at most 10 characters')
+    .max(50, 'Security Answer at most is 50 characters')
+    .matches(/^[A-Za-z0-9]*$/, 'Security answer can only contain letters and numbers')
     .required("Security answer is required")
 })
 
