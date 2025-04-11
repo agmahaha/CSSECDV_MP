@@ -14,6 +14,8 @@ export const registerUser = async (req, res) => {
             phone_num,
             failedAttempts,
             lockUntil,
+            securityQuestion,
+            securityAnswer
         } = req.body
         
         if (!username || !password || !email) {
@@ -25,6 +27,7 @@ export const registerUser = async (req, res) => {
 
         
         const hash = await bcrypt.hash(password, 10)
+        const hashedAnswer = await bcrypt.hash(securityAnswer, 10);
         
         const newUser = new User({
             username,
@@ -35,9 +38,12 @@ export const registerUser = async (req, res) => {
             failedAttempts,
             lockUntil,
             passwordHistory: [hash],
-            passwordChangedAt: Date.now()
+            passwordChangedAt: Date.now(),
+            securityQuestion,
+            securityAnswer: hashedAnswer 
         })
         const savedUser = await newUser.save()
+        console.log(savedUser)
         const message = `User registration successful at ${new Date().toISOString()} from ${req.ip}`;
         await logUser(username, message, userType)
         res.status(201).json(savedUser)

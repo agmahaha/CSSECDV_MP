@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {TextField, Typography, Button, Box} from '@mui/material'
 import {Formik} from "formik"
 import * as yup from 'yup'
@@ -12,6 +12,24 @@ const Login = () => {
     const [isLogin, setIsLogin] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [selectedQuestion, setSelectedQuestion] = useState('');
+
+const sampleQuestions = {
+    1: "What is the name of the first school you attended?",
+    2: "What is the name of your childhood best friend?",
+    3: "What was the make and model of your first car?",
+    4: "What is the name of the street you lived on when you were 10?",
+    5: "What was the name of your first pet?",
+    6: "What is the title of the first movie you saw in a theater?"
+}
+
+useEffect(() => {
+    if (!isLogin) {
+      const keys = Object.keys(sampleQuestions);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      setSelectedQuestion(sampleQuestions[randomKey]);
+    }
+  }, [isLogin]);
 
 const signupSchema = yup.object().shape({
   email: yup.string()
@@ -23,6 +41,7 @@ const signupSchema = yup.object().shape({
     .min(10, 'Password must be at least 10 characters')
     .matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
     .required("required"),
+  securityAnswer: yup.string().required("Security answer is required")
 })
 
 const loginSchema = yup.object().shape({
@@ -31,12 +50,14 @@ const loginSchema = yup.object().shape({
 })
 
 const initialValuesReg = {
-  username:"",
-  password:"",  
-  email:"",
-  userType: "customer",
-  phone_num:"",
-}
+    username: "",
+    password: "",  
+    email: "",
+    userType: "customer",
+    phone_num: "",
+    securityQuestion: "",
+    securityAnswer: "", 
+  };
 
 const initialValuesLog ={
   username:"",
@@ -44,7 +65,6 @@ const initialValuesLog ={
   userType: "customer",
   message:""
 }
-
 
   const handleFormSubmit = async(values, onSubmitProps) => {
     if (isLogin === true) await loginUser(values, onSubmitProps);
@@ -106,8 +126,6 @@ const initialValuesLog ={
   }
 
   const registerUser = async (values, onSubmitProps) => {
-    console.log(values.userType)
-
     const savedUserResponse = await fetch(
       "http://localhost:3001/auth/register",
       {
@@ -119,11 +137,14 @@ const initialValuesLog ={
           email: values.email,
           userType: "customer",
           phone_num: "",
+          securityQuestion: selectedQuestion,
+          securityAnswer: values.securityAnswer
         })
       }
     )
 
     const savedUser = await savedUserResponse.json()
+    console.log(savedUser)
 
     console.log("registering in user: " + savedUser.email + values.username);
     onSubmitProps.resetForm()
@@ -133,7 +154,7 @@ const initialValuesLog ={
       if (values.username.toLowerCase() !== "" && values.password !== "" && values.email !== "") {
         console.log("Log payload:", {
             username: values.username,
-            message: "failed to login.",
+            message: "failed to register.",
             userType: values.userType,
           })
         alert(values.username + " registered successfully!");
@@ -253,6 +274,41 @@ const initialValuesLog ={
               }}
               InputLabelProps={{ style: {color: 'black'}}}
               />
+            {!isLogin && (
+            <TextField
+                fullWidth
+                label="Security Question"
+                value={selectedQuestion}
+                name="securityQuestion"
+                variant="filled"
+                InputProps={{ readOnly: true }}
+                sx={{
+                input: { backgroundColor: '#E8e4c9' },
+                label: { color: 'white' },
+                }}
+                InputLabelProps={{ style: { color: 'black' } }}
+            />
+            )}
+
+            {!isLogin && (
+            <TextField
+                fullWidth
+                label="Answer to Security Question"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.securityAnswer}
+                name="securityAnswer"
+                variant="filled"
+                error={Boolean(touched.securityAnswer) && Boolean(errors.securityAnswer)}
+                helperText={touched.securityAnswer && errors.securityAnswer}
+                sx={{
+                input: { backgroundColor: '#E8e4c9' },
+                label: { color: 'white' },
+                }}
+                InputLabelProps={{ style: { color: 'black' } }}
+            />
+            )}
+
             <Button
               variant='contained'
               type='submit'
